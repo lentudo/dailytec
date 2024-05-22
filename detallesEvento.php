@@ -1,0 +1,240 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Evento</title>
+    <link rel="stylesheet" href="styles.css">
+	
+    <style>
+		
+        body {
+            background-color: orange;+ /* Fondo naranja */
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background-color: #ccc; /* Fondo gris */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #333;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .banner {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: red;
+        }
+
+.tabla-eventos {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FFFFFF; /* blanco */
+    color: #333333; /* gris oscuro */
+}
+
+.tabla-eventos th,
+.tabla-eventos td {
+    padding: 8px;
+    border: 1px solid #333333; /* gris oscuro */
+}
+
+.tabla-eventos th {
+    background-color: #FFA500; /* naranja */
+}
+
+		.tabla-eventos {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-eventos th, .tabla-eventos td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.tabla-eventos th {
+    background-color: #ccc; /* Color de fondo gris para la cabecera */
+}
+
+.tabla-eventos tr:nth-child(even) {
+    background-color: #f2f2f2; /* Color de fondo alternativo para filas pares */
+}
+    </style>
+</head>
+<body>
+	
+<div class="container">
+	
+	
+      <h1>Detalles del Evento</h1>
+        
+<div>
+  <?php
+    // Conexión a la base de datos
+    include('conexion.php');
+
+    // Verificar la conexión
+    if ($con) {
+        // Obtener el ID del evento
+        $evento_id = $_GET['idEvento'];
+
+        // Consulta SQL para obtener los detalles del evento
+        $query = "SELECT E.nombre, E.descripcion, E.fecha_inicio, E.fecha_fin, E.liberacion_creditos, C.nombre AS carrera, E.banner FROM evento E 
+                INNER JOIN carrera C ON C.idCarrera = E.fk_carrera 
+                WHERE E.idEvento = $evento_id";
+        $result = sqlsrv_query($con, $query);
+
+        // Verificar si la consulta fue exitosa
+        if ($result) {
+            // Obtener los detalles del evento
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+
+            // Mostrar el banner del evento si está disponible
+            if (!empty($row['banner'])) {
+                echo "<img src='{$row['banner']}' alt='Banner del Evento' class='banner'>";
+            }
+
+            // Mostrar los detalles del evento
+            echo "<h2>{$row['nombre']}</h2>";
+            echo "<p>{$row['descripcion']}</p>";
+            echo "<p>Fecha de Inicio: {$row['fecha_inicio']->format('M d, Y')}</p>";
+            echo "<p>Fecha de Fin: {$row['fecha_fin']->format('M d, Y')}</p>";
+            echo "<p>Liberación de Créditos: {$row['liberacion_creditos']}</p>";
+            echo "<p>Carrera: {$row['carrera']}</p>";
+
+            // Liberar los recursos
+            sqlsrv_free_stmt($result);
+        } else {
+            // Si hubo un error en la consulta, mostrar el mensaje de error
+            die("Error en la consulta: " . print_r(sqlsrv_errors(), true));
+        }
+
+        // Cerrar la conexión
+        sqlsrv_close($con);
+    } else {
+        // Si hubo un error en la conexión, mostrar el mensaje de error
+        die("Error en la conexión: " . print_r(sqlsrv_errors(), true));
+    }
+?>
+
+
+  </div>
+	<div>
+	&nbsp;
+	</div>
+        <a href="editarEvento.php?idEvento=<?php echo $evento_id; ?>" class="btn">Editar</a> 
+	
+	
+	
+</div>
+<div>&nbsp;</div>
+<h1>Actividades de este evento</h1>
+	<div style="text-align: center"> <a href="CrearAct.php?idEvento=<?php echo $evento_id; ?>" class="btn">Añadir Actividad</a>
+	  <div>&nbsp;</div>
+    </div>
+	
+	
+<table class="tabla-eventos">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Imagen</th>
+                <th>Modalidad</th>
+                <th>Lugar</th>
+                <th>Fecha de Inicio</th>
+                <th>Fecha final</th>
+                <th>Hora inicio</th>
+                <th>Hora final</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+
+        </tbody>
+    </table>
+	
+</body>
+</html>
